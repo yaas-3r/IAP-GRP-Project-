@@ -1068,7 +1068,262 @@ mapbox-search-box {
 
   <!-- Main Script -->
    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+   service = params.get("service") ;
+
+
+
+    document.querySelectorAll(".totalValue").forEach(div => {
+    div.textContent = `Kes 0`;
+    });
+
+
+    if(service){
+    document.getElementById("selectedServiceDisplay").textContent = `: ${service}`;
+    }else{
+         document.getElementById("selectedServiceDisplay").textContent = ": Service not selected!";
+         document.getElementById("selectedServiceDisplay").style.color ="red";
+    }
+    const formDynamicImage = document.getElementById("form-dynamic-image");
+    const dynamicImage = { 
+
+        "Home-relocation": "./images/home-relocation.jpg",
+        "Pet-moving": "./images/pet-relocation.jpg",
+        "Office-moving": "./images/office-relocation.jpg",
+        "Hazardous-moving": "./images/hazardous-relocation2.jpg",
+        "Fragile-moving": "./images/fragile-relocation.jpg",
+        "Machinery-moving": "./images/machinery-relocation.jpg"
+    }
+    if(service && formDynamicImage){
+        const backgroundImage = dynamicImage[service];
+
+        if(backgroundImage){
+            formDynamicImage.style.backgroundImage = `url("${backgroundImage}")`;
+        }
+
+    }
+    if(!service){
+      formDynamicImage.style.backgroundColor = "#ccc";
+      formDynamicImage.style.display = "flex";
+      formDynamicImage.style.justifyContent = "center";
+      formDynamicImage.style.alignItems = "center";
+      formDynamicImage.style.flexDirection = "column";
+      
+      const img = document.createElement("img");
+      img.src = "./images/Sad-emoji2.png";
+      img.alt = "NO service. Please go back and select a service to continue"
+      img.style.width = "50%";
+      img.style.height = "50%";
+      img.style.borderRadius = "5rem";
+      formDynamicImage.appendChild(img);
+
+      const message1 = document.createElement("p");
+
+      message1.textContent = "No Service Selected!"
+      message1.style.color = "red";
+      message1.style.fontWeight = "bold";
+      message1.style.fontSize = "2rem";
+      message1.style.marginTop = "1rem";
+      message1.style.textAlign = "center";
+      formDynamicImage.appendChild(message1);
+
+        const message2 = document.createElement("p");
+
+      message2.textContent = "Please go back and select a service."
+      message2.style.color = "#2e2e2e";
+      message2.style.fontSize = "1.5rem";
+      message2.style.fontWeight = "light";
+      message2.style.marginTop = "0.2rem";
+      message2.style.textAlign = "center";
+      formDynamicImage.appendChild(message2)
+    }
+
+
+
+
+
+
+
+
+
+
+     const ServicePrices = {
+       "Home-relocation": 10000,
+       "Pet-moving": 5000,
+       "Office-moving": 15000,
+       "Hazardous-moving": 15000,
+       "Fragile-moving": 9000,
+       "Machinery-moving": 20000
+    }
+    const fixedVehicles = {
+      "Pet-moving": "van1",
+      "Fragile-moving": "pickupStandard",
+      "Machinery-moving": "truckPickup",
+      "Hazardous-moving": "oilTruck"
+    };
+    const vehicleByRooms = {
+      1: "van1",
+      2: "van2",
+      3: "pickupStandard",
+      4: "pickupLarge",
+      5: "truckPickup",
+      6: "largeCanter",
+    };
+    const vehiclePrices = {
+      van1: 2500,
+      van2: 4500,
+      pickupStandard: 3000,
+      pickupLarge: 3800,
+      truckPickup: 5200,
+      canterStandard: 8000,
+      largeCanter: 12500,
+      oilTruck: 18000
+    };
+
+    const vehicleName = {
+      van1: "Small Van",
+      van2: "Large Van",
+      pickupStandard: "Standard Pickup",
+      pickupLarge: "Large Pickup",
+      truckPickup: "Truck Pickup",
+      canterStandard: "Standard Canter",
+      largeCanter: "Large Canter",
+      oilTruck: "Oil Truck"
+    };
+    const isFixed = ["Pet-moving", "Fragile-moving", "Machinery-moving", "Hazardous-moving"].includes(service);
+   
+    if(isFixed){
+      recommendedVehicleId = fixedVehicles[service];
+      updateRecommendation(recommendedVehicleId);
+    }
+    
+    const roomSelect = document.getElementById("rooms");
+    roomSelect.addEventListener("change", function () {
+      this.blur(); 
+      if(isFixed) return;
+
+       noOfRooms = this.value;
+       const parsedRooms = parseInt(noOfRooms) || 1;
+
+      recommendedVehicleId = vehicleByRooms[parsedRooms] || "van1";
+      updateRecommendation(recommendedVehicleId);
+    });
+
+    const pickupBox = document.getElementById("pickup-box");
+    const dropoffBox = document.getElementById("dropoff-box");
+
+    pickupBox.addEventListener("retrieve", function(e){
+        const feature = e.detail.features[0];
+        if(!feature) return;
+
+        pickupName = feature.properties.full_address;
+        pickupCoords = feature.geometry.coordinates;
+        console.log(feature);
+        console.log("pickupName SET TO:", pickupName);
+        
+    })
+     dropoffBox.addEventListener("retrieve", function(e){
+        const feature = e.detail.features[0];
+        if(!feature) return;
+
+        dropOffName = feature.properties.full_address;
+        dropoffCoords = feature.geometry.coordinates;
+         console.log("pickupName SET TO:", dropOffName);
+        
+    })
+
+
+
+
+
+
+
+    const form = document.getElementById("booking-form");
+    form.addEventListener("submit", function(e){
+        e.preventDefault();
+
+        name = document.getElementById("user-name").value.trim() || "Guest";
+        noOfRooms = document.getElementById("rooms").value.trim();
+        userPhone = document.getElementById("user-phone").value.trim();
+       
+        date = document.getElementById("moveDate").value;
+
+
+        document.getElementById("summaryName").textContent = name;
+        document.getElementById("summaryPhone").textContent = userPhone;
+        document.getElementById("summaryDate").textContent = date;
+        document.getElementById("summaryRooms").textContent = noOfRooms;
+        document.getElementById("summaryPickup").textContent = pickupName;
+        document.getElementById("summaryDropoff").textContent = dropOffName;
+
+        storageKey = `${name}'s Booking-Data`;
+        BookingData = JSON.parse(sessionStorage.getItem(storageKey)) || {};
+
+
+        popup.style.display = "flex" ;
+    });
+
+
+
+
+
+
+
+
+
+    
+    function updateRecommendation(id){
+    document.querySelectorAll(".vehicle").forEach(card =>{
+      card.classList.remove("recommended");
+      const badge = document.querySelector(".recommended-badge");
+      if(badge) badge.remove();
+    })
+
+    const recommendedVehicleCard = document.querySelector(`#${id}`);
+
+    if(recommendedVehicleCard){
+      recommendedVehicleCard.classList.add("recommended");
+      const badge = document.createElement("div");
+      badge.className = "recommended-badge";
+      badge.textContent = "⭐ Recommended";
+      recommendedVehicleCard.prepend(badge);
+    }
+
+    const vehicleSummary = document.querySelector("#summaryVehicle");
+    vehicleSummary.textContent = `(${vehicleName[id]})`;
+    document.querySelector("#summaryService").textContent = `(${service})`;
   
+
+    updateTotalPrice(id);
+    };
+
+
+
+
+    function updateTotalPrice(id){
+      const serviceCharge = ServicePrices[service];
+      const vehicleCharge = vehiclePrices[id];
+
+      const totalDiv = document.querySelectorAll(".totalValue");
+
+      totalDiv.forEach(div =>{
+        totalValue = serviceCharge + vehicleCharge;
+      div.textContent = `Kes ${totalValue}`;
+      });
+        document.querySelector("#summaryVehiclePrice").textContent = `+ ${vehicleCharge}`;
+        document.querySelector("#summaryServicePrice").textContent = `+ ${serviceCharge}`;
+    }
+
+    
+
+   
+   
+    
+    
+    
+
+
 
 
 
@@ -1092,7 +1347,7 @@ mapbox-search-box {
         link.classList.remove("active"); 
       }
     });
- 
+  });
 </script>
 
 
