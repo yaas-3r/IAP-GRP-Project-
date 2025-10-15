@@ -1061,7 +1061,22 @@ mapbox-search-box {
     
 
 
-    
+    function UpdateBookingData(updates){
+      BookingData = {...BookingData, ...updates};
+      if (!storageKey) return;
+      sessionStorage.setItem(`${storageKey}`, JSON.stringify(BookingData))
+    }
+
+
+
+    function generateOrderID(length = 12) {
+      const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+      let orderId = '#';
+      for (let i = 0; i < length; i++) {
+        orderId += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return orderId;
+    }
 </script>
 
 
