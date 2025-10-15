@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moveKenya</title>
+     <link rel="stylesheet" href="./styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    
+  <script type="module" src="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.css">
+   <script type="module" src="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.css">
+    <style>
+
+body{
+    padding:0;
+    margin:0;
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 1rem;
+    font-style: normal;
+
+}
+#form-holder{
+    width: 100%;
+    height: 80vh;
+    margin-top: 0rem;
+    position: relative;
+    bottom: 5rem;
+    align-items: center;
+    justify-content: center;
+}
+#form-dynamic-image{
+    width: 30%;
+    height: 100%;
+    border-radius: 5rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+}
+#booking-form{
+    width: 40%;
+    height: 40rem;
+    background-color: #434d56;
+}
+#user-name,
+input[type="date"],
+input[type="email"],
+input[type="tel"]{
+    all: unset;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 20rem;
+    color: #ffffff;
+    margin-left: 5rem;
+    margin-top: 2rem;
+    padding: 10px 10px 10px 5px;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus{
+    outline: none;
+    border-color: #d06f49;
+    box-shadow: 0 0 5px rgba(208, 111, 73, 0.5);
+    box-shadow: 0 4px 10px rgba(7, 108, 96, 0.2);
+    color: white;
+}
+
+input:-webkit-autofill {
+-webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+-webkit-text-fill-color: white !important;
+transition: background-color 9999s ease-in-out 0s;
+caret-color: white;
+}
+input[type="hidden"] {
+  display: none !important;
+}
+
+.custom-select {
+  position: relative;
+  width: 10rem;
+  margin-left: 5rem;
+  margin-top: 2rem;
+}
+
+.custom-select select {
+  all: unset;
+  width: 100%;
+  padding: 10px 40px 10px 5px;
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
+ border-bottom: 2px solid #ccc;
+  background: transparent;
+  transition: border-color 0.3s ease;
+   border-radius: 8px;
+}
+
+.custom-select select:focus {
+ border-color: #d06f49;
+  box-shadow: 0 0 5px rgba(208, 111, 73, 0.5);
+  color: rgb(255, 255, 255);
+  
+}
+
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid white;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+.custom-select select option {
+  background-color: rgb(83, 81, 81); 
+  color: white;
+}
+.custom-select select:focus + .select-arrow {
+  transform: translateY(-50%) rotate(180deg); 
+}
+#confirmBookingPopUP{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none;
+
+}
+#pop-up-content{
+    width: 25%;
+    height: 85%;
+    background-color: white;
+    
+}
+#pop-up-content p{
+    color: black;
+    margin-left: 1rem;
+    font-size: 0.8rem;
+}
+ .payment-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 80%;
+    height:1rem;
+    margin: auto;
+}
+.payment-option input[type="radio"] {
+  cursor: pointer;
+}
+ button.action-button {
+    margin-top: 1rem;
+    margin-right: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-left: 2.7rem;
+    margin-top: 2.5rem;
+}
+
+    button.confirm {
+    background-color: #00C853;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3);
+}
+
+    button.confirm:hover {
+    background-color: #00B342;
+    transform: translateY(-2px);
+}
+
+    button.cancel {
+    background-color: #FF5252;
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 82, 82, 0.3);
+}
+
+    button.cancel:hover {
+    background-color: #E04848;
+    transform: translateY(-2px);
+}
+button[type="submit"]{
+    padding: 2rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-left: 2.7rem;
+    margin-top: 2.5rem;
+     background-color: var(--brown-light);
+    color: white;
+    width: 10rem;
+    height: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3);
+}
+#vehicles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rem;
+  width: 100%;
+  margin-top: 5rem;
+  justify-content: center;
+  padding-top: 3rem;
+  background-color: #26333f;
+  padding-bottom: 3rem;
+  border-top-left-radius: 3rem;
+  border-top-right-radius: 3rem;
+  border-top: 8px solid var(--brown-light);
+
+
+}
+.vehicle img{
+    object-fit: contain;
+    width: 100%;
+    height: 40%;
+   
+}
+.vehicle {
+  width: 20rem;
+  height: 30rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(231, 135, 8, 0.3);
+  overflow: hidden;
+  background-color: #fff;
+  transition: transform 0.3s ease, height 0.4s ease;
+}
+.vehicle:hover {
+  transform: translateY(-5px);
+  height: 38rem; 
+}
+.vehicle .car-info {
+  background: linear-gradient(to bottom right, #ffffff, #e3e3e3);
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  transition: height 0.4s ease;
+  height: 60%;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  color: #2c3e50;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.04);
+}
+.vehicle:hover .car-info {
+  height: calc(38rem * 0.6);
+}
+.car-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background-color: var(--brown-light);
+  padding: 0.25rem 0.6rem;
+  display: inline-block;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+}
+.car-capacity,
+.car-usage,
+.car-price,
+.car-availability {
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+  padding: 0.3rem 0.5rem;
+  border-left: 4px solid var(--blue-light);
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  line-height: 1.3;
+  color: black;
+}
+
+.car-price {
+  color: #27ae60;
+  border-left-color: #27ae60;
+  font-weight: 600;
+}
+
+.car-availability {
+  color: #2ecc71;
+  border-left-color: #2ecc71;
+  font-weight: 600;
+}
+
+.car-features {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+.car-features li {
+  font-size: 0.8rem;
+  margin: 0.2rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+  color: #333;
+}
+.car-features li::before {
+  content: '✔️';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.extra-info {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease-in-out;
+  margin-top: 0.5rem;
+  padding-top: 0.2rem;
+  border-top: 1px dashed #aac;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: #2c3e50;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #f5faff, #edf6ff);
+  border-radius: 0.3rem;
+  padding: 0.3rem 0.5rem;
+}
+.vehicle:hover .extra-info {
+  opacity: 1;
+  max-height: 6rem;
+}
+.extra-info p {
+  background-color: #eaf6ff;
+  font-size: 0.9rem;
+  border-left: 3px solid #3498db;
+  border-radius: 3px;
+  color: black;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  margin: 0;
+  line-height: 0.9;
+}
+.section-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+
+}
+.section-heading::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 6px;
+  background: linear-gradient(to right, var(--brown-light), var(--blue-dark));
+  border-radius: 6px 6px 0 0;
+}
+
+.vehicle {
+  position: relative;
+}
+
+.recommended-badge {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  background: linear-gradient(to right, #ffe168, #ffc800);
+  color: #1a1a1a;
+  padding: 0.4rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 5;
+  letter-spacing: 0.5px;
+}
+
+mapbox-search-box {
+  display: block;
+  max-width: 20rem;
+  margin-bottom: 1rem;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+ .footer {
+      background-color: #26333f;
+      color: #fff;
+      padding: 60px 30px 30px;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .footer-column {
+      flex: 1 1 280px;
+    }
+
+    .footer-column h3 {
+      color: #d06f49;
+      margin-bottom: 16px;
+      font-size: 18px;
+      border-bottom: 2px solid #434d56;
+      display: inline-block;
+      padding-bottom: 6px;
+    }
+
+    .logo-area h2 {
+      font-size: 24px;
+      margin: 10px 0 5px;
+      color: #fff;
+    }
+
+    .logo-area p {
+      font-size: 14px;
+      color: #aaa;
+      margin: 0 0 20px;
+    }
+
+    .footer-column p {
+      line-height: 1.6;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .contact-info p span {
+      color: #d06f49;
+      margin-right: 8px;
+    }
+
+    .nav-links ul,
+    .hours-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-links ul li,
+    .hours-list li {
+      margin: 8px 0;
+      color: #bbb;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .nav-links ul li a {
+      text-decoration: none;
+      color: #bbb;
+    }
+
+    .nav-links ul li a:hover {
+      color: #fff;
+    }
+
+    .hours-list li span {
+      float: right;
+      color: #ddd;
+    }
+
+    .footer-bottom {
+      margin-top: 40px;
+      border-top: 1px solid #434d56;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .footer-bottom a {
+      color: #d06f49;
+      margin-left: 20px;
+      text-decoration: none;
+    }
+
+    .footer-bottom a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+
+
+
+    </style>
+  
+</head>
+
+
+
+
+<body>
+    
+     <div id = "hero" style="height: 20rem; ">
+      <div id="logo" style="margin-left: 12rem;"><img src="./images/Group 6.png"> </div>
+
+      <nav id="navbar" style="margin-top: 1rem;">
+          <div class="spanbackground">
+            <a href="./Home.html" class="active">Home</a>
+            <a href="./aboutUs.html">About Us</a>
+            <a href="./services.html">Services</a>
+            <a href="./faq.html">FAQ</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./contact.html">Contact Us</a>
+          </div>
+
+          <div class="getquote">
+            <a href="./quote.html">Get A Free Quote</a>
+          </div>
+
+        </nav>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 80%; height: 5rem; border-top-left-radius: 5rem; border-top-right-radius: 5rem; background-color: white; margin: auto; position: relative; margin-top: 6rem;">
+            <p class="bold " style=" margin-left: 5rem; color: black;  font-size: 1.5rem; ">Booking<span id="selectedServiceDisplay" style="font-size: 1rem; color: rgb(10, 233, 47);"></span></p>
+            <div style="display: flex; align-items: center; max-width: fit-content; margin-right: 5rem;">                           
+                <div onclick="window.location.href ='./Home.html'"  style="width: 1rem; height: 1rem; margin-right: 0.8rem; background-image: url(./images/home_6270584.png); background-size: contain;  cursor: pointer; "></div>
+                <p style="color: black; ">>> Booking</p>
+            </div>
+        </div>  
+  </div>
+
+
+   <P class="lower-large bold" style="color: black; position: relative; text-align: center; margin: 0; top: 11.5rem;">Book Your <span style="color: #d06f49;">Move</span></P>
+  <p style="font-weight: 5rem; color: rgb(160, 4, 4); font-size: 8rem; opacity: 0.05; font-weight: bold; text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; margin-top: 5rem;">Bookings</p>
+  <p style="color: grey; text-align: center; position: relative; bottom: 11rem; margin-bottom: 0;">You're just a few steps away from a smooth, stress-free move. Let’s get started!</p>
+
+
+
+
+  <div id="form-holder" class="flex">
+        <div id="form-dynamic-image"></div>
+        <form id="booking-form">
+                <div class="flex" style="width: 100%; height: auto; ">
+                  <input type="text" id="user-name" name="Fullname" placeholder="Your Name" autocomplete="name"  onblur="capitalizeWords(this)" required><br><br>
+                    <div class="custom-select"> 
+                        <select id="rooms" name="rooms" required>
+                        <option value="" disabled selected>Select rooms</option>                   
+                        <option value="1">1 Room</option>
+                        <option value="2">2 Rooms</option>
+                        <option value="3">3 Rooms</option>
+                        <option value="4">4 Rooms</option>
+                        <option value="5">5 Rooms</option>
+                        <option value="6+">6+ Rooms</option>
+                        </select>
+                            <span class="select-arrow"></span>
+                    </div>
+                </div>
+                 
+                 <input type="tel" id="user-phone" name="Phone" placeholder="(+254)Your Phone-Number" autocomplete="tel" required>
+
+                <div style="margin: 1rem 0; width: 100%; max-width: 500px; margin-left: 5rem; margin-top: 3rem;">
+                  <mapbox-search-box
+                    id="pickup-box"
+                    access-token="pk.eyJ1IjoieWFhczNyIiwiYSI6ImNtYzZrMHQydDBybzQya3NjODIwb2F3YmMifQ.DMIbHrOr3DYHRILl8GqRQw"
+                    placeholder="Search for pickup location..."
+                    types="address,place,poi"
+                    proximity="36.8219,-1.2921"
+                    bbox="33.8938,-4.6796,41.8996,5.506">
+                  </mapbox-search-box>
+                </div>
+
+                  <input type="hidden" id="pickup-location" name="pickup-location">
+                  <input type="hidden" id="pickup-latlng" name="pickup-latlng">
+
+                 <div style="margin: 1rem 0; width: 100%; max-width: 500px; margin-left: 5rem; margin-top: 3rem;">
+                    <mapbox-search-box
+                      id="dropoff-box"
+                      access-token="pk.eyJ1IjoieWFhczNyIiwiYSI6ImNtYzZrMHQydDBybzQya3NjODIwb2F3YmMifQ.DMIbHrOr3DYHRILl8GqRQw"
+                      placeholder="Search for drop-off location..."
+                      types="address,place,poi"
+                      proximity="36.8219,-1.2921"
+                      bbox="33.8938,-4.6796,41.8996,5.506">
+                    </mapbox-search-box>
+                  </div>
+                  <input type="hidden" id="dropoff-location" name="dropoff-location">
+                  <input type="hidden" id="dropoff-latlng" name="dropoff-latlng">
+
+                <input type="date" id="moveDate" name="moveDate" required>
+                <textarea style="all: unset; width: 80%; height: 10rem; background-color:  #ccc; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; border-radius: 2rem; margin-left: 5rem; margin-top: 2rem; padding:1rem; resize: none;" type="te" name="additionalMessage" placeholder="Enter Additional Message" id="additionalMessage"></textarea>
+        </form>
+  </div>
+
+
+
+ <h2 class="section-heading">Available Vehicles</h2>
+
+  <div id="vehicles" class="flex">
+    
+
+     <div class="vehicle" id="van1">
+        <img src="./images/van 11.jpg">
+        <div class="car-info">
+            <h2 class="car-title">Mini Van</h2>
+            <p class="car-capacity">🚚 Capacity: 600 kg | 4 m³</p>
+            <p class="car-usage">🏠 Best for: Small item moves, studio apartments</p>
+            
+            <ul class="car-features">
+            <li>Enclosed Cargo</li>
+            <li>Driver Included  + Loading Assistant</li>
+            <li>GPS Tracking</li>
+            </ul>
+            
+            <p class="car-price">💰 KES 2,500 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p> 
+
+            <div class="extra-info">
+                <p>📦 Includes loading/unloading help</p>
+                <p>🛡️ Insurance cover available</p>
+                <p>📅 Flexible scheduling options</p>
+            </div>
+        </div>
+    </div>
+
+     <div class="vehicle" id="van2">
+        <img src="./images/van3.jpg" alt="Medium Van">
+        <div class="car-info">
+            <h2 class="car-title">Medium Van</h2>
+            <p class="car-capacity">🚚 Capacity: 1,200 kg | 7.5 m³</p>
+            <p class="car-usage">🏠 Best for: 1–2 bedroom moves, office equipment</p>
+            
+            <ul class="car-features">
+            <li>Enclosed Cargo Area</li>
+            <li>Driver + Loading Assistant</li>
+            <li>Real-Time GPS Tracking</li>
+            </ul>
+            
+            <p class="car-price">💰 KES 4,500 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p> 
+
+            <div class="extra-info">
+               <p>🔒 Covered by full transport insurance</p>
+               <p>🧪 Supports small hazardous items</p>
+               <p>✅ Vetted and professional drivers</p> 
+            </div>
+        </div>
+    </div>
+
+     <div class="vehicle" id="pickupStandard">
+        <img src="./images/pickup1.jpg">
+        <div class="car-info">
+            <h2 class="car-title">Standard Pickup</h2>
+            <p class="car-capacity">🚚 Capacity: 900 kg | 5.5 m³</p>
+            <p class="car-usage">🏠 Best for: Furniture, medium home items</p>
+
+            <ul class="car-features">
+            <li>Open Cargo Bed</li>
+            <li>Driver Included</li>
+            <li>GPS Tracking</li>
+            </ul>
+
+            <p class="car-price">💰 KES 3,000 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p> 
+
+            <div class="extra-info">
+            <p>🛡️ Fully insured cargo</p>
+              <p>🧪 Suitable for hazardous items</p>
+            <p>👨‍🔧 Professional driver & handling</p>
+            </div>
+        </div>
+    </div>
+
+
+     <div class="vehicle" id="pickupLarge">
+        <img src="./images/pickup2.jpg">
+        <div class="car-info">
+            <h2 class="car-title">Medium Pickup</h2>
+            <p class="car-capacity">🚚 Capacity: 1,200 kg | 7 m³</p>
+            <p class="car-usage">🏗️ Best for: Bulky items, small relocations</p>
+
+            <ul class="car-features">
+            <li>Enclosed Canopy Option</li>
+            <li>Experienced Driver</li>
+            <li>GPS Tracking</li>
+            </ul>
+
+            <p class="car-price">💰 KES 3,800 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p>
+
+            <div class="extra-info">
+            <p>🛡️ Cargo secured and insured</p>
+            <p>⏱️ On-time delivery guarantee</p>
+            <p>💬 Dedicated support line</p>
+            </div>
+        </div>
+    </div>
+
+   <div class="vehicle" id="truckPickup">
+        <img src="./images/pickup-truck.jpg">
+        <div class="car-info">
+            <h2 class="car-title">Heavy Pickup Truck</h2>
+            <p class="car-capacity">🚚 Capacity: 1,800 kg | 9 m³</p>
+            <p class="car-usage">🏢 Best for: Office moves, long-distance loads</p>
+
+            <ul class="car-features">
+            <li>Truck Head Power</li>
+            <li>Heavy-duty Suspension</li>
+            <li>GPS Tracking</li>
+            </ul>
+
+            <p class="car-price">💰 KES 5,200 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p>
+
+            <div class="extra-info">
+            <p>🔐 Heavy-duty cargo insurance</p>
+            <p>📡 Advanced fleet tracking system</p>
+            <p>🏆 Certified logistics professionals</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="vehicle" id="canterStandard">
+        <img src="./images/canter2.jpg" alt="Canter Truck" />
+        <div class="car-info">
+            <span class="car-title">Standard Canter</span>
+            <p class="car-capacity">🚛 Capacity: Up to 2–3 bedroom moves</p>
+            <p class="car-usage">🏢 Best for: Large homes or office relocations</p>
+            <ul class="car-features">
+            <li>Heavy-duty support</li>
+            <li>Driver + 2 Movers</li>
+            <li>Secure Enclosed Cargo</li>
+            </ul>
+            <p class="car-price">💰 KES 8,000 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p>
+
+            <div class="extra-info">
+            <p>✅ Trusted for large household moves</p>
+            <p>✔️ Ideal for bulky furniture & electronics</p>
+            <p>🕒 Available in all major towns</p>
+            </div>
+        </div>
+    </div>
+
+   <div class="vehicle" id="largeCanter">
+        <img src="./images/canter1.jpg" alt="Larger Canter Truck" />
+        <div class="car-info">
+            <span class="car-title">Large Canter</span>
+            <p class="car-capacity">🚛 Capacity: Up to 6–8 bedrooms</p>
+            <p class="car-usage">🏭 Best for: Full house moves, office blocks, warehouse delivery</p>
+
+            <ul class="car-features">
+            <li>High-sided enclosed space</li>
+            <li>Driver + Moving Crew</li>
+            <li>Long-body cargo deck</li>
+            </ul>
+
+            <p class="car-price">💰 KES 12,500 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p>
+
+            <div class="extra-info">
+            <p>✔️ Trusted for complex relocations</p>
+            <p>✅ Recommended for business clients</p>
+            <p>📦 Best for fragile + bulky combinations</p>
+            </div>
+        </div>
+    </div>
+
+     <div class="vehicle" id="oilTruck">
+        <img src="images/oiltruck1.jpg" alt="Hazardous Materials Truck" />
+        <div class="car-info">
+            <span class="car-title">Hazardous Materials Truck</span>
+            <p class="car-capacity">🧪 Capacity: 3,000 – 10,000 liters</p>
+            <p class="car-usage">☢️ Best for: Oil, chemical, gas, flammable or toxic transport</p>
+
+            <ul class="car-features">
+            <li>Certified hazardous transport</li>
+            <li>Reinforced sealed tank</li>
+            <li>Emergency response kit on board</li>
+            </ul>
+
+            <p class="car-price">💰 KES 18,000 / trip</p>
+            <p class="car-availability">🟢 Available for Move</p>
+
+            <div class="extra-info">
+            <p>🔐 Safety compliance with NEMA & KEBS</p>
+            <p>🚓 Escort-ready for high-risk loads</p>
+            <p>🧯 Fire-rated & pressure-secured tanks</p>
+            </div>
+        </div>
+    </div>
+
+   
+  </div> 
+   
+
+
+
+
+
+    <div id="confirmBookingPopUP" class="popup-overlay">
+        <div id="pop-up-content">
+            <h2 style="margin-left: 1rem; margin-top: 2rem;">Order Summary</h2> 
+            <hr>
+            <p>Your Details</p>
+
+            <div style="width: 90%; height: auto; margin: auto; background-color:#ccc; border-bottom: 1px solid; border-top: 1px solid; box-sizing:border-box;">
+                <p><strong>Name:</strong><span style="margin-left: 1rem;" id="summaryName"></span></p>
+                <p><strong>Phone:</strong><span style="margin-left: 1rem;" id="summaryPhone"></span></p>
+            </div>
+
+            <p>Date Details</p>
+
+            <div style="width: 90%; height: auto; margin: auto; background-color:#ccc; border-bottom: 1px solid; border-top: 1px solid; box-sizing:border-box;">
+                <p><strong>Move Date:</strong><span style="margin-left: 1rem;" id="summaryDate"></span></p>
+            </div>
+
+            <p>Location Details</p>
+
+            <div style="width: 90%; height: auto; margin: auto; background-color:#ccc; border-bottom: 1px solid; border-top: 1px solid; box-sizing:border-box;">
+                <p><strong>Pick Up Location:</strong><span style="margin-left: 1rem;" id="summaryPickup"></span></p>
+                <p><strong>Drop Off Location:</strong><span style="margin-left: 1rem;" id="summaryDropoff"></span></p>
+            </div>
+
+            <p><strong>No Of Rooms:</strong><span style="margin-left: 1rem;" id="summaryRooms"></span></p>
+            <p style="display: flex; justify-content: space-between; align-items: center;">
+            <span>
+              <strong>Vehicle:</strong>
+              <span id="summaryVehicle" style="margin-left: 1rem; color: #ccc;"></span>
+            </span>
+            <span id="summaryVehiclePrice" style="color: #00C853; margin-right: 2rem;"></span>
+          </p>
+
+          <p style="display: flex; justify-content: space-between; align-items: center;">
+            <span>
+              <strong>Service Charge:</strong>
+              <span id="summaryService" style="margin-left: 1rem; color: #ccc;"></span>
+            </span>
+            <span id="summaryServicePrice" style="color: #00C853; margin-right: 2rem;"></span>
+          </p>
+
+            <hr>
+
+            <div class="payment-option" onclick="selectPayment('mpesa')"  style="margin-top: 1rem;">
+                <span style="font-size: 0.9rem;">Pay with M-Pesa 📱</span>
+                <input type="radio" name="paymentMethod" id="mpesaOption">
+            </div>
+
+            <div class="payment-option" onclick="selectPayment('cash')" style="margin-top: 1rem;">
+                <span style="font-size: 0.9rem;">Pay with cash 💵</span>
+                <input type="radio" name="paymentMethod" id="cashOption">
+            </div>
+            <hr>
+
+           <h2 style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 2rem 0 1rem;">
+            <span>TOTAL:</span>
+            <span class="totalValue" style="color: #00C853;"></span>
+          </h2>
+              <button class="action-button confirm" onclick="confirmBooking()">Confirm Move</button>
+              <button class="action-button cancel" onclick="closePopup()">Cancel Booking</button>
+            
+        </div>
+
+
+    </div>
+        <div id="confirmBookingPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background-color: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); text-align: center; z-index: 9999; width: 300px;">
+  
+  <div id="popupSpinner">
+    <div class="spinner" style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #3b82f6;
+     border-radius: 50%; animation: spin 1s linear infinite; margin: auto;"></div>
+    <p id="spinnerText" style="margin-top: 1rem; font-weight: bold; color: black;">Processing your booking...</p>
+  </div>
+
+  <div id="popupConfirmed" style="display: none;">
+    <p style="font-size: 1.2rem; font-weight: bold; color: green;">✅ Booking Confirmed!</p>
+    <p id="redirectText" style="color: black;">Redirecting to live map in <span id="redirectCountdown" style="color: black;">3</span> seconds...</p>
+  </div>
+</div>
+
+
+    <button type="submit" form="booking-form">Submit</button>
+   <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column logo-area">
+        <h2>moveKenya</h2>
+        <p>Reliable Moving Solutions</p>
+        <p>
+          moveKenya connects you with verified moving companies across Kenya. Whether you're relocating your home, office, pets, or fragile items—we’ve got you covered.
+        </p>
+        <div class="contact-info">
+          <p><span>📞</span> +254 712 345 678</p>
+          <p><span>📧</span> support@movekenya.co.ke</p>
+          <p><span>📍</span> Nairobi, Kenya</p>
+        </div>
+      </div>
+
+      <div class="footer-column nav-links">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/services">Our Services</a></li>
+          <li><a href="/booking">Book a Move</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/faq">FAQs</a></li>
+          <li><a href="/blog">Moving Blog</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Support Hours</h3>
+        <p>We're here for you <span style="color:#d06f49;">24/7</span> – all year round.</p>
+        <ul class="hours-list">
+          <li>Mon - Fri <span>8AM - 5PM</span></li>
+          <li>Saturday <span>9AM - 2PM</span></li>
+          <li>Sunday <span>Email Support Only</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 moveKenya. All rights reserved.</p>
+      <div>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+<script>
+    let name = "";
+    let noOfRooms = "";
+    let userPhone = "";
+    let date = "";
+    let storageKey = "";
+    let BookingData = {};
+    let recommendedVehicleId = "";
+    let service = "";
+    let totalValue = 0;
+    let paymentMethod = "";
+    let pickupName = "";
+    let pickupCoords = "";
+    let dropOffName = "";
+    let dropoffCoords = "";
+
+
+
+    
+
+    
+
+    
+
+   
+   
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll("#navbar a");
+
+    navLinks.forEach(link => {
+      const linkPage = link.getAttribute("href").split("/").pop();
+      if (linkPage === currentPage) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active"); 
+      }
+    });
+  
+</script>
+
+
+</body>
+</html>
