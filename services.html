@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="services.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    
+     <div id = "hero" style="height: 20rem;">
+      <div id="logo" style="margin-left: 12rem;"><img src="./images/Group 6.png"> </div>
+
+      <nav id="navbar" style="margin-top: 1rem;">
+          <div class="spanbackground">
+            <a href="./Home.html" class="active">Home</a>
+            <a href="./aboutUs.html">About Us</a>
+            <a href="./services.html">Services</a>
+            <a href="./faq.html">FAQ</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./contact.html">Contact Us</a>
+          </div>
+
+          <div class="getquote">
+            <a href="./quote.html">Get A Free Quote</a>
+          </div>
+
+        </nav>
+        <div style="display: flex; align-items: center;  width: 80%; height: 5rem; border-top-left-radius: 5rem; border-top-right-radius: 5rem; background-color: white; margin: auto; position: relative; margin-top: 6rem;">
+            <p class="bold " style=" margin-left: 5rem; color: black;  font-size: 1.5rem; ">Services</p>
+            <div onclick="window.location.href ='./Home.html'"  style="width: 1rem; height: 1rem; margin-left: 75%; margin-right: 0.8rem; background-image: url(./images/home_6270584.png); background-size: contain;  cursor: pointer; "></div>
+            <p style="color: black; ">>> Services</p>
+        </div>
+
+      
+  </div>
+
+
+
+  <P class="lower-large bold" style="color: black; position: relative; text-align: center; margin: 0; top: 11.5rem;">Choose A <span style="color: var(--brown-light);">Service</span></P>
+  <p style="font-weight: 5rem; color: rgb(160, 4, 4); font-size: 8rem; opacity: 0.05; font-weight: bold; text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; margin-top: 5rem;">SERVICES</p>
+  <p style="color: grey; text-align: center; position: relative; bottom: 11rem;">Select a service to get started with your personalized booking experience.</p>
+
+
+  
+  <div class="features">
+
+      <div class="flex features-content">
+        <div class="card card7">
+          <div class="card-div" onclick="selectService('Home-relocation')">
+            <p>Home Relocation</p>
+          </div>
+        </div>
+
+        <div class="card card8">
+          <div class="card-div" onclick="selectService('Pet-moving')">
+            <p>Pet Moving</p>
+          </div>
+        </div>
+
+        <div class="card card9">
+          <div class="card-div" onclick="selectService('Office-moving')">
+            <p>Office Moving</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex features-content features-content2">
+        <div class="card card10" >
+          <div class="card-div" onclick="selectService('Hazardous-moving')">
+            <p>Hazardous Moving</p>
+          </div>
+        </div>
+
+        <div class="card card11">
+          <div class="card-div" onclick="selectService('Fragile-moving')">
+            <p>Fragile Moving</p>
+          </div>
+        </div>
+
+        <div class="card card12" >
+          <div class="card-div" onclick="selectService('Machinery-moving')">
+            <p>Machinery Moving</p>
+          </div>
+        </div>
+
+      </div>
+  </div>
+
+
+
+<footer class="footer">
+    <div class="footer-container">
+     
+      <div class="footer-column logo-area">
+        <h2>moveKenya</h2>
+        <p>Reliable Moving Solutions</p>
+        <p>
+          moveKenya connects you with verified moving companies across Kenya. Whether you're relocating your home, office, pets, or fragile items—we’ve got you covered.
+        </p>
+        <div class="contact-info">
+          <p><span>📞</span> +254 712 345 678</p>
+          <p><span>📧</span> support@movekenya.co.ke</p>
+          <p><span>📍</span> Nairobi, Kenya</p>
+        </div>
+      </div>
+
+      <div class="footer-column nav-links">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/services">Our Services</a></li>
+          <li><a href="/booking">Book a Move</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/faq">FAQs</a></li>
+          <li><a href="/blog">Moving Blog</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Support Hours</h3>
+        <p>We're here for you <span style="color:#d06f49;">24/7</span> – all year round.</p>
+        <ul class="hours-list">
+          <li>Mon - Fri <span>8AM - 5PM</span></li>
+          <li>Saturday <span>9AM - 2PM</span></li>
+          <li>Sunday <span>Email Support Only</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 moveKenya. All rights reserved.</p>
+      <div>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
+
+
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll("#navbar a");
+
+    navLinks.forEach(link => {
+      const linkPage = link.getAttribute("href").split("/").pop();
+      if (linkPage === currentPage) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active"); 
+      }
+    });
+  });
+
+
+
+  function selectService(serviceName) {
+        const url = `booking.html?service=${encodeURIComponent(serviceName)}`;
+        window.location.href= url;
+  }
+
+
+</script>
+
+
+</body>
+</html>
