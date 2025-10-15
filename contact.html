@@ -186,3 +186,119 @@
       margin-left: 20px;
       text-decoration: none;
     }
+     .footer-bottom a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+    @media (max-width: 768px) {
+      .contact-section {
+        flex-direction: column;
+      }
+      .footer-container {
+        flex-direction: column;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+     </style>
+</head>
+<body>
+
+<header>
+  <h1>Contact Us</h1>
+  <p>We're here to help you with your move—reach out anytime!</p>
+</header>
+
+<section class="contact-section">
+  <div class="contact-info">
+    <h2>Get In Touch</h2>
+    <p><strong>Phone:</strong> +254 712 345 678</p>
+    <p><strong>Email:</strong> support@movekenya.co.ke</p>
+    <p><strong>Location:</strong> Nairobi, Kenya</p>
+    <p><strong>Support Hours:</strong><br> Mon - Fri: 8AM - 5PM<br> Sat: 9AM - 2PM<br> Sun: Chat & Email only</p>
+    <p><strong>Emergency Support:</strong> Available 24/7 for urgent relocation issues. Call or WhatsApp.</p>
+    <p><strong>Partner Inquiries:</strong> Interested in joining our mover network? Email partnerships@movekenya.co.ke</p>
+  </div>
+
+  <div class="contact-form">
+    <h2>Send Us a Message</h2>
+    <form action="#" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <input type="text" name="subject" placeholder="Subject">
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+<div class="map-container">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.857408810579!2d36.82194671475786!3d-1.2920650990562349!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d4f02b2cf1%3A0xfed53c2a30c8d297!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1612357387123" allowfullscreen="" loading="lazy"></iframe>
+</div>
+
+<div class="cta-banner">
+  <h2>Need Help Planning Your Move?</h2>
+  <p>Our customer support team is always ready to guide you through the process. Let's make your move smooth and stress-free!</p>
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column logo-area">
+        <h2>moveKenya</h2>
+        <p>Reliable Moving Solutions</p>
+        <p>
+          moveKenya connects you with verified moving companies across Kenya. Whether you're relocating your home, office, pets, or fragile items—we’ve got you covered.
+        </p>
+        <div class="contact-info">
+          <p><span>📞</span> +254 712 345 678</p>
+          <p><span>📧</span> support@movekenya.co.ke</p>
+          <p><span>📍</span> Nairobi, Kenya</p>
+        </div>
+      </div>
+
+      <div class="footer-column nav-links">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/services">Our Services</a></li>
+          <li><a href="/booking">Book a Move</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/faq">FAQs</a></li>
+          <li><a href="/blog">Moving Blog</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+       <div class="footer-column">
+        <h3>Support Hours</h3>
+        <p>We're here for you <span style="color:#d06f49;">24/7</span> – all year round.</p>
+        <ul class="hours-list">
+          <li>Mon - Fri <span>8AM - 5PM</span></li>
+          <li>Saturday <span>9AM - 2PM</span></li>
+          <li>Sunday <span>Email Support Only</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 moveKenya. All rights reserved.</p>
+      <div>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
