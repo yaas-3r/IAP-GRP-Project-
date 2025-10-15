@@ -989,17 +989,86 @@ mapbox-search-box {
 
     
 
+    function selectPayment(method){
+        paymentMethod = method;
+
+        document.getElementById("mpesaOption").checked = (method === "mpesa");
+        document.getElementById("cashOption").checked = (method === "cash");
+    }
+    const popup = document.getElementById("confirmBookingPopUP");
+
+    function closePopup(){
+        popup.style.display = "none";
+    }
+
+
+  
+     function capitalizeWords(input) {
+      input.value = input.value.replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+
+  function confirmBooking(){
+    const orderId = generateOrderID();
+      UpdateBookingData({
+          name,
+          noOfRooms,
+          userPhone,
+          date,
+          totalValue,
+          recommendedVehicleId,
+          service,
+          paymentMethod,
+          pickupName,
+          pickupCoords,
+          dropOffName,
+          dropoffCoords,
+          orderId
+          });
     
+     popup.style.display = "none";
+    document.getElementById("popupSpinner").style.display = "block";
+    document.getElementById("popupConfirmed").style.display = "none";
+    document.getElementById("confirmBookingPopup").style.display = "block";
+
+
+    let processingSeconds = 3;
+    const spinnerText = document.getElementById("spinnerText");
+    const processingInterval = setInterval(() => {
+      spinnerText.innerHTML = `Processing your booking... (${processingSeconds})`;
+      processingSeconds--;
+      if (processingSeconds < 0) {
+        clearInterval(processingInterval);
+
+        document.getElementById("popupSpinner").style.display = "none";
+        document.getElementById("popupConfirmed").style.display = "block";
+
+        let secondsLeft = 3;
+        const countdownSpan = document.getElementById("redirectCountdown");
+        const countdownInterval = setInterval(() => {
+          countdownSpan.textContent = secondsLeft;
+          secondsLeft--;
+          if (secondsLeft < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("confirmBookingPopup").style.display = "none";
+           window.open(`tracking.html?key=${encodeURIComponent(storageKey)}`, "_blank");
+          }
+        }, 1000);
+      }
+    }, 1000);
+  }
 
     
 
-   
-   
+
     
-    
-    
+</script>
 
 
+
+  <!-- Main Script -->
+   <script>
+  
 
 
 
@@ -1023,7 +1092,7 @@ mapbox-search-box {
         link.classList.remove("active"); 
       }
     });
-  
+ 
 </script>
 
 
