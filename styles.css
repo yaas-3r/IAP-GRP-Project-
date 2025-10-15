@@ -1,0 +1,727 @@
+:root{
+    --animation-duration: 10s;
+    --heading-color: #792010;
+    --blue-light : #434d56;
+    --blue-dark : #26333f;
+    --brown-light : #d06f49;
+}
+body{
+    padding:0;
+    margin:0;
+    font-size: 20px;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 1rem;
+    font-style: normal;
+
+}
+h2{
+    padding: 0;
+    margin:0;
+}
+#hero{
+    width: 100%;
+    height:97vh;
+    background-image: url(./images/pexels-cottonbro-4568711.jpg);
+    background-size: cover;
+    overflow: hidden;
+   
+}
+
+.features{
+    width:80%;
+    height:700px;
+    background-color:white;
+    margin: auto;
+    border-top-right-radius: 60px;
+    border-top-left-radius: 60px;
+    position: relative;
+    bottom:6rem;
+}
+#logo{
+    position: relative;
+    display:inline-block;
+    width:auto;
+    left:10px;
+}
+#navbar{
+    width:80%;
+    height:4rem;
+    border-radius: 20px;
+    margin: auto;
+    display: flex;
+    padding: 0;
+}
+.spanbackground{
+    display:flex;
+    width:70%;
+    height:4rem;
+    background-color: rgba(90, 89, 78, 0.4);
+    align-items: center;
+    border-radius: 20px;
+    margin-left: 0;
+    justify-content: space-between;
+    
+}
+
+.spanbackground a{
+    margin:auto;
+    display: inline-block;
+    transition: all 0.3s ease;
+    
+}
+.spanbackground a:hover{
+      color:var(--brown-light) !important;
+    
+
+}
+#navbar a.active{
+    font-weight: 100px !important;
+    color:var(--brown-light);
+}
+#navbar a{
+    color:white;
+    text-decoration: none;
+    
+}
+.getquote{
+    display: flex;
+    margin-left: auto;
+    background-color:#d06f49;
+    border-radius: 20px;
+    width:auto;
+    align-items: center;
+
+}
+
+.getquote a{
+    padding:12px 20px;
+}
+.getquote:hover{
+    scale:1.05;
+    background-color: rgb(4, 77, 68);
+    transition: all 0.3s ease;
+}
+p{
+    color: white;
+    font-size: 20px;
+}
+.slogan{
+    text-align: center;
+    position:relative;
+    top:20rem;
+}
+.linef{
+    height:1px;
+    width:30%;
+    background-color: #26333f;
+    margin: auto;
+}
+.grey{
+    color:#B8B8B8;
+}
+.yellow{
+    background-color: #FFC107 ;
+}
+.bold{
+    font-weight: bold;
+}
+.large{
+    font-size: 4rem;
+    margin:0;
+}
+.lower-large{
+    font-size: 3rem !important;
+}
+.light{
+    font-weight: lighter;
+}
+.flex{
+    display:flex;
+}
+.brown{
+    color: rgb(208, 111, 73);
+}
+.book{
+    position: relative;
+    top:320px;
+    right: 40rem;
+    height:auto;
+    width:fit-content;
+    border: 3px solid #d06f49;
+    display:flex;
+    margin:auto;
+    justify-content: center;
+    align-items: center;
+   
+}
+.book a{
+    list-style: none;
+    text-decoration: none;
+    color:white;
+    padding:20px 20px;
+}
+.book:hover{
+    scale:1.05;
+    background-color: #26333f;
+    transition: all 0.3s ease;
+}
+.style{
+    width:12rem;
+    height:6rem;
+    margin: auto;
+    border-radius: 15px;
+    position:relative;
+    top:50px
+}
+.style2{
+    width:20rem;
+    height:4rem;
+    margin: auto;
+    border-radius: 10px;
+    position:relative;
+    background-color:#0a0a0a;
+    bottom:30px;
+    padding:0;
+    text-align: center;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.style2 p{
+    font-size:30px;
+}
+.partner{
+    display: flex;
+    justify-content: center;
+
+}
+.partner p{
+    color:black;
+    font-size: 3rem;
+   
+}
+.features-content{
+    width:100%;
+    height:30rem;
+    justify-content: space-around;
+    
+}
+.card{
+    display: flex;
+    width:30%;
+    height: 20rem;
+    border-radius: 20px;
+    align-items: flex-end;
+    justify-content: center;
+}
+.card1{
+    background-image: url(./images/pexels-liza-summer-6348095.jpg);
+    background-size: cover;
+}
+.card2{
+    background-image: url(./images/pexels-tima-miroshnichenko-6169660.jpg);
+    background-size: cover;
+}
+.card3{
+    background-image: url(./images/pexels-ketut-subiyanto-4246062.jpg);
+    background-size: cover;
+}
+.card4{
+    background-image: url(./images/pexels-mibernaa-31916807.jpg);
+    background-size: cover;
+}
+.card5{
+    background-image: url(./images/quoteimage.jpg);
+    background-size: cover;
+}
+.card6{
+    background-image: url(./images/pexels-rdne-7362886.jpg);
+    background-size: cover;
+    background-position: bottom;
+}
+.card7{
+    background-image: url(./images/home-relocation.jpg);
+    background-size: cover;
+}
+.card8{
+    background-image: url(./images/pet-relocation.jpg);
+    background-size: cover;
+}
+.card9{
+    background-image: url(./images/office-relocation.jpg);
+    background-size: cover;
+}
+.card10{
+    background-image: url(./images/hazardous-relocation2.jpg);
+    background-size: cover;
+}
+.card11{
+    background-image: url(./images/fragile-relocation.jpg);
+    background-size: cover;
+}
+.card12{
+    background-image: url(./images/machinery-relocation.jpg);
+    background-size: cover;
+}
+
+.card-div{
+    position: relative;
+    top:4rem;
+    width:65%;
+    height:40%;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+    text-align: center;
+    transition:all 0.3s ease;
+}
+.card-div p{
+    color:black;
+    font-weight: bold;
+    font-size: 30px;
+
+}
+.card-div:hover{
+    transform: translateY(-20px);
+    background-color: #FFC107;
+    cursor: pointer;
+}
+.trust{
+    width:80%;
+    height:700px;
+    margin: auto;
+    margin-top: 30rem;
+    background-image: url(./images/istockphoto-153710544-612x612.jpg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    justify-content: space-between;
+}
+.trust-divs{
+    width:40%;
+    height:90%;
+    position:relative;
+    top:3rem;
+    
+    
+}
+.tag{
+    width:50%;
+    height:8rem;
+    transition: all 0.3s ease;
+    margin-bottom: 7rem;
+}
+.hover-right:hover{
+    transform: translateX(1rem);
+}
+.hover-left:hover{
+    transform: translateX(-1rem);
+}
+
+.tag-image{
+    width:7rem;
+    height:7rem;
+    background-size: cover;
+}
+.tag-image1{
+    background-image: url(./images/delivery-truck1.png);
+}
+.tag-image2{
+    background-image: url(./images/calendar.png);
+}
+.tag-image3{
+    background-image: url(./images/map-pin.png);
+}
+.tag-image4{
+    background-image: url(./images/product.png);
+}
+.tag-image5{
+    background-image: url(./images/cooperation.png);
+}
+.tag-image6{
+    background-image: url(./images/customer-support.png);
+}
+.tag p{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+    margin: 1rem;
+}
+.tag1{
+    position:relative;
+    left:40%
+}
+.tag2{
+    position:relative;
+    left:20%
+}
+.tag3{
+    position:relative;
+    left:35%
+}
+.tag4{
+    position:relative;
+    left:10%;
+}
+.tag5{
+    position:relative;
+    left:30%;
+}
+.tag6{
+    position:relative;
+    left:20%;
+}
+.comment-section{
+    position:relative;
+    width:100%;
+    height:900px;
+}
+.comment-section img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    
+}
+.overlay{
+position: absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-color: rgba(67, 77, 86, 0.7);
+text-align: center;
+
+}
+.scroller[data-animated="true"]{
+    width:80%;;
+    height:60%;
+    margin: auto;
+    margin-top: 7rem;
+    overflow: hidden;
+    display:flex;
+    align-items: center;
+
+    /* -webkit-mask: linear-gradient(
+        90deg,
+        rgb(0,0,0,0),
+        rgb(0,0,0,1)20%,
+        rgb(0,0,0,1)80%,
+        rgb(0,0,0,0)
+
+    );    
+     mask: linear-gradient(
+        90deg,
+        rgb(0,0,0,0),
+        rgb(0,0,0,1)20%,
+        rgb(0,0,0,1)80%,
+        rgb(0,0,0,0)
+
+    );     */
+    
+}
+.scroller-inner{
+    display: flex;
+    gap: 4rem;
+    width:max-content;
+    animation: scroll var(--animation-duration, 10s) linear infinite;
+    
+    
+}
+.scroller:hover .scroller-inner {
+      animation-play-state: paused;
+}
+.comment-box{
+    width: 35rem;
+    height: 25rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    display: flex;
+     flex-direction: column;
+  
+    
+    
+}
+.avatar{
+    width:8rem;
+    height:8rem;
+    padding: 0;
+   background-size: cover;
+    border-radius: 50%;
+    margin: auto;
+    position: relative;
+    bottom: 4rem;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+   
+}
+.avatar1{
+    background-image: url(./images/pexels-polina-tankilevitch-4728655.jpg);
+}
+.avatar2{
+    background-image: url(./images/pexels-doquyen-1520760.jpg);
+}
+.avatar3{
+    background-image: url(./images/pexels-kooldark-17311576.jpg);
+   
+}
+.avatar4{
+    background-image: url(./images/pexels-absoluteabhi-20440138.jpg);
+}
+.testimonials{
+    margin-bottom: 3rem;
+}
+.comment-box h2{
+    position: relative;
+    bottom: 3rem ;
+}
+
+.comment-box .location {
+  color: black;
+  font-weight: 0.8rem;
+  position: relative;
+  bottom: 4.2rem;
+}
+.comment{
+    color:black;
+    text-align: start;
+    position: relative;
+    bottom: 3rem;
+    margin:0 2rem;
+}
+.ratings{
+    padding: 0;
+    width: 6rem;
+    height: 2rem;
+    background-image: url(./images/travel.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 2rem;
+}
+.heading{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+}
+.line{
+    height: 0.2rem;
+    background-color: black;
+    width: 39%;
+    margin: auto;
+}
+.line-left{
+    margin-right: 2.1rem;
+}
+.line-right{
+    margin-left: 2.1rem;
+}
+.workflow-title{
+    color:black;
+    text-align: center;
+    width: max-content;
+    
+}
+.workflow-title span{
+    color:#d06f49;
+}
+
+.workflow-section{
+    width: 100%;
+    height: 50rem;
+    margin-top: 25rem;
+    background-color: #434d56;
+}
+.step-cards{
+    width: 80%;
+    height: 42rem;
+    margin: auto;
+    position: relative;
+    bottom: 20rem;
+    display: flex;
+    justify-content: space-between;
+}
+.step-cards .step-card{
+    width: 30%;
+    background-color: #D9D9D9;
+    border-radius: 2rem;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.5);
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+.step-image{
+    width: 100%;
+    border-top-left-radius: 2rem;
+     border-top-right-radius: 2rem;
+    height:25rem;
+    
+}
+.step-image1{
+    background-image: url(./images/pexels-karolina-grabowska-4968390.jpg);
+    background-size: cover;
+}
+.step-image2{
+    background-image: url(./images/pexels-pavel-danilyuk-8111863.jpg);
+    background-size: cover;
+}
+.step-image3{
+    background-image: url(./images/pexels-pavel-danilyuk-8112172.jpg);
+    background-size: cover;
+}
+.steps{
+    text-align: center;
+    margin-top: 1rem;
+    transform: translateZ(3rem) !important;
+}
+.steps span{
+    margin-right: 0.5rem;
+}
+.step-card p{
+    text-align: center;
+    color: grey;
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+     transform: translateZ(2rem) !important;
+}
+.step-card:hover{
+    transform: rotateY(.5turn);
+}
+
+.front,
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 2rem;
+  transform-style: preserve-3d;
+}
+
+.front {
+  background-color: #D9D9D9;
+  z-index: 2;
+}
+
+.back {
+  background-color: #333;
+  border-left: 0.5rem solid #d06f49;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.back h2{
+    color: #d06f49;
+    transform: translateZ(2rem) !important;
+}
+.offer-icons{
+    width: 100%;
+    height: 20rem;
+    border-bottom: 0.1rem solid rgb(73, 72, 72);
+    display: flex;
+}
+.inner-offer{
+    width:80%;
+    height: 15rem;
+    margin: auto;
+    display: flex;
+    margin-top: 2rem;
+}
+.offer-icon{
+    width:15%;
+    height: 10rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: invert(1) brightness(0.6);
+    margin: auto;
+    margin-left:4rem ;
+    margin-top: 1rem;
+}
+.offer-icon1{
+    background-image: url(./images/home_2413074.png);
+    
+}
+.offer-icon2{
+    background-image: url(./images/pet-love_5188084.png);
+    height: 9.5rem !important;
+}
+.offer-icon3{
+    background-image: url(./images/traffic-sign_18966213.png);
+}
+.offer-icon4{
+    background-image: url(./images/glass_16096854.png);
+}
+.offer-icon5{
+    background-image: url(./images/box_3638908.png);
+}
+.offer-icon6{
+    background-image: url(./images/factory-machine_3401629.png);
+}
+.offer-icon p{
+    color: rgb(95, 95, 95);
+    position: relative;
+    top: 12rem;
+    font-size: 1rem;
+    margin-right: 2rem !important;
+}
+.company-heading{
+    width:100%;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.half-line{
+    width:5rem;
+    height: 0.4rem;
+}
+.half-line-left{
+    margin-right: 1rem;
+}
+.half-line-right{
+    margin-left: 1rem;
+}
+.scroller-inner2 > *{
+    width: 30rem;
+    height: 20rem;
+}
+.scroller-inner2 > * img{
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+.footer1{
+    width: 100%;
+    height:20rem;
+    margin-top: 30rem;
+   
+    position: relative;
+}
+.mover-image{
+    position: absolute;
+    width: 35%;
+    height: 40rem;
+    background-image: url(./images/676c3af1ed9f5.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    bottom: 4rem;
+    scale: 1.2;
+    left: 60%;
+}
+.overlay2{
+position: absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-color: rgba(46, 1, 1, 0.7);
+text-align: center;
+
+}
+@keyframes scroll{
+    to{
+        transform: translate(calc(-50% - 2rem));
+    }
+}
