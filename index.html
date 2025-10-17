@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Driver Command Center</title>
+   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    :root {
+      --primary-color: #2980b9;
+      --success-color: #27ae60;
+      --danger-color: #e74c3c;
+      --bg-light: #ffffff;
+      --bg-dark: #1e2a38;
+      --text-light: #ecf0f1;
+      --text-dark: #2c3e50;
+      --shadow-light: rgba(0,0,0,0.07);
+      --shadow-heavy: rgba(0,0,0,0.2);
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #eaf0f7, #d0e3f1);
+      color: var(--text-dark);
+      overflow: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body.dark {
+      background: #121b26;
+      color: var(--text-light);
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 80px 1fr 300px;
+      gap: 20px;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    
+    .header {
+      grid-column: 1 / 3;
+      background-color: var(--bg-light);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px var(--shadow-light);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .header {
+      background-color: #243447;
+      box-shadow: 0 8px 20px var(--shadow-heavy);
+    }
+
+    .driver-info {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .driver-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-image: url('./images/driver-vincent.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+      transition: box-shadow 0.3s ease;
+    }
+    .driver-avatar:hover {
+      box-shadow: 0 6px 15px var(--primary-color);
+      cursor: pointer;
+    }
+
+    .driver-status {
+      background-color: #e0f7e9;
+      color: var(--success-color);
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 0 8px var(--success-color);
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .driver-status {
+      background-color: #27ae60;
+      color: #e0f7e9;
+      box-shadow: 0 0 12px #27ae60;
+    }
+
+    
+    .map-panel {
+      grid-column: 1 / 2;
+      grid-row: 2 / 4;
+      background-color: var(--bg-light);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px var(--shadow-light);
+      overflow: hidden;
+      position: relative;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .map-panel {
+      background-color: #243447;
+      box-shadow: 0 12px 30px var(--shadow-heavy);
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 6px var(--primary-color));
+      transition: filter 0.3s ease;
+    }
+
+    
+    .sidebar {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .info-card, .eta-distance, .trip-log, .status-updater {
+      background-color: var(--bg-light);
+      border-radius: 15px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 6px 15px var(--shadow-light);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .info-card,
+    body.dark .eta-distance,
+    body.dark .trip-log,
+    body.dark .status-updater {
+      background-color: #243447;
+      box-shadow: 0 6px 15px var(--shadow-heavy);
+    }
+    .info-card h3, .eta-distance h3, .trip-log h3, .status-updater h3 {
+      margin-top: 0;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      user-select: none;
+    }
+
+    
+    .eta-distance {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 0.7rem;
+    }
+    .metric {
+      text-align: center;
+      flex: 1;
+      user-select: none;
+      position: relative;
+    }
+    .metric:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 40%;
+      background-color: #ccc;
+      opacity: 0.3;
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      color: gray;
+      margin-bottom: 0.3rem;
+    }
+    .metric-value {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-shadow: 0 0 4px rgba(41, 128, 185, 0.3);
+    }
+    body.dark .metric-label {
+      color: #aaa;
+    }
+
+    
+    .status-updater select, .status-updater button {
+      width: 100%;
+      padding: 0.65rem;
+      margin-top: 0.7rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1.8px solid #ccc;
+      font-weight: 500;
+      transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+      outline-offset: 2px;
+      outline-color: transparent;
+      cursor: pointer;
+      user-select: none;
+    }
+    .status-updater select:focus {
+      border-color: var(--primary-color);
+      outline-color: var(--primary-color);
+      box-shadow: 0 0 8px var(--primary-color);
+    }
+    body.dark .status-updater select {
+      background-color: #304559;
+      border-color: #527bbf;
+      color: var(--text-light);
+    }
+    body.dark .status-updater select:focus {
+      border-color: #8db4e2;
+      outline-color: #8db4e2;
+      box-shadow: 0 0 10px #8db4e2;
+    }
+    .status-updater button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(41, 128, 185, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    .status-updater button:hover {
+      background-color: #1c598a;
+      box-shadow: 0 8px 20px rgba(28, 89, 138, 0.7);
+    }
+    body.dark .status-updater button {
+      box-shadow: 0 6px 15px rgba(137, 179, 234, 0.6);
+    }
+    body.dark .status-updater button:hover {
+      background-color: #1c598a;
+      box-shadow: 0 10px 25px rgba(28, 89, 138, 0.9);
+    }
+
+    
+    .chat-panel {
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+      background-color: var(--bg-light);
+      border-radius: 15px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 10px 25px var(--shadow-light);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .chat-panel {
+      background-color: #243447;
+      box-shadow: 0 10px 25px var(--shadow-heavy);
+    }
+    .chat-panel h3 {
+      margin-top: 0;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .chat-preview {
+      background-color: #ecf0f1;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      user-select: none;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    .chat-preview:hover {
+      background-color: #d0dbe6;
+      box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+    }
+    body.dark .chat-preview {
+      background-color: #304559;
+      color: var(--text-light);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+    body.dark .chat-preview:hover {
+      background-color: #3d566f;
+      box-shadow: 0 6px 15px rgba(41, 128, 185, 0.6);
+    }
+
+    .chat-window {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px var(--shadow-heavy);
+      z-index: 999;
+      width: 420px;
+      max-width: 90vw;
+      user-select: text;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    body.dark .chat-window {
+      background-color: #243447;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      color: var(--text-light);
+    }
+    .chat-window h3 {
+      margin-top: 0;
+      font-weight: 700;
+      color: var(--primary-color);
+      user-select: none;
+    }
+    .chat-window p {
+      margin: 1rem 0 0 0;
+      line-height: 1.4;
+    }
+    .chat-window .chat-messages {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      border-radius: 12px;
+      background-color: #f9f9f9;
+      color: #444;
+      user-select: text;
+      transition: background-color 0.3s ease;
+    }
+    body.dark .chat-window .chat-messages {
+      background-color: #304559;
+      border-color: #3a4f68;
+      color: var(--text-light);
+    }
+
+    .chat-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 1.5px solid #ccc;
+      outline-offset: 2px;
+      outline-color: transparent;
+      transition: border-color 0.3s ease;
+    }
+    .chat-input:focus {
+      border-color: var(--primary-color);
+      outline-color: var(--primary-color);
+      box-shadow: 0 0 8px var(--primary-color);
+    }
+    body.dark .chat-input {
+      background-color: #304559;
+      border-color: #527bbf;
+      color: var(--text-light);
+    }
+    body.dark .chat-input:focus {
+      border-color: #8db4e2;
+      outline-color: #8db4e2;
+      box-shadow: 0 0 10px #8db4e2;
+    }
+
+    .send-btn {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 0 1.3rem;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .send-btn:hover {
+      background-color: #1c598a;
+    }
+    body.dark .send-btn {
+      box-shadow: 0 6px 15px rgba(137, 179, 234, 0.6);
+    }
+    body.dark .send-btn:hover {
+      background-color: #1c598a;
+      box-shadow: 0 10px 25px rgba(28, 89, 138, 0.9);
+    }
+
+    .close-btn {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.2rem;
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .close-btn:hover {
+      background-color: #a83731;
+    }
+
+    .dark-mode-toggle {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .dark-mode-toggle:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-light);
+    }
+    body.dark .dark-mode-toggle {
+      border-color: #8db4e2;
+      color: #8db4e2;
+    }
+    body.dark .dark-mode-toggle:hover {
+      background-color: #8db4e2;
+      color: var(--bg-dark);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="grid-layout">
+    <div class="header">
+      <div class="driver-info">
+        <div class="driver-avatar" title="Vincent Ruiru"></div>
+        <div>
+          <h2 style="margin: 0;">Vincent Ruiru</h2>
+          <p style="margin: 0; color: #7f8c8d;">Vehicle: KCD 512C</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items:center; gap:1rem;">
+        <div class="driver-status" id="driverStatus">On Trip</div>
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">Dark Mode</button>
+      </div>
+    </div>
+
+    <div class="map-panel">
+      <div id="map"></div>
+    </div>
+
+    <div class="sidebar">
+      <div class="info-card">
+        <h3>Current Task</h3>
+        <p>Pickup: <strong>City Mall</strong></p>
+        <p>Drop-off: <strong>Westlands Market</strong></p>
+        <p>Scheduled Time: <strong>3:00 PM</strong></p>
+      </div>
+
+      <div class="eta-distance" aria-label="Estimated Time of Arrival, Distance and Speed metrics">
+        <div class="metric" role="group" aria-labelledby="etaLabel">
+          <div id="etaLabel" class="metric-label">ETA</div>
+          <div id="driver-ETA" class="metric-value">10 min</div>
+        </div>
+        <div class="metric" role="group" aria-labelledby="distanceLabel">
+          <div id="distanceLabel" class="metric-label">Distance</div>
+          <div id="driver-distance" class="metric-value">2.5 km</div>
+        </div>
+        <div class="metric" role="group" aria-labelledby="speedLabel">
+          <div id="speedLabel" class="metric-label">Speed</div>
+          <div class="metric-value">45 km/h</div>
+        </div>
+      </div>
+
+      <div class="status-updater">
+        <h3>Update Move Status</h3>
+        <select id="statusSelect" aria-label="Select current move status">
+          <option value="Driver assigned and preparing for the move">Driver assigned and preparing for the move</option>
+          <option value="Driver en route to pickup location">Driver en route to pickup location</option>
+          <option value="Driver has arrived at pickup location">Driver has arrived at pickup location</option>
+          <option value="Items are being loaded">Items are being loaded</option>
+          <option value="Loading complete, starting the journey">Loading complete, starting the journey</option>
+          <option value="En route to delivery location">En route to delivery location</option>
+          <option value="Driver has arrived at delivery location">Driver has arrived at delivery location</option>
+          <option value="Items are being unloaded">Items are being unloaded</option>
+          <option value="Unloading complete">Unloading complete</option>
+          <option value="Move successfully completed">Move successfully completed</option>
+        </select>
+        <button onclick="sendStatus()">Update Status</button>
+      </div>
+    </div>
+
+    <div class="chat-panel" aria-label="Incoming chats panel">
+      <h3>Incoming Chats</h3>
+      <div class="chat-preview" onclick="openChat('admin')" role="button" tabindex="0" aria-label="Open chat with Admin">
+        <span><strong>Admin:</strong> Please confirm delivery time...</span>
+        <span>Now</span>
+      </div>
+      <div class="chat-preview" onclick="openChat('user')" role="button" tabindex="0" aria-label="Open chat with User">
+        <span><strong>User:</strong> Kindly call me on arrival...</span>
+        <span>5 mins ago</span>
+      </div>
+    </div>
+
+    <div id="chat-admin" class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chatAdminTitle" tabindex="-1">
+      <h3 id="chatAdminTitle">Chat with Admin</h3>
+      <div class="chat-messages" id="chatAdminMessages" aria-live="polite" aria-atomic="false">
+        <p><strong>Admin:</strong> Hello Driver, please confirm delivery time.</p>
+      </div>
+      <div class="chat-input-group">
+        <input type="text" id="chatAdminInput" class="chat-input" placeholder="Type your message..." aria-label="Message to Admin" />
+        <button class="send-btn" onclick="sendMessage('admin')" aria-label="Send message to Admin">Send</button>
+      </div>
+      <button class="close-btn" onclick="closeChat('admin')" aria-label="Close chat with Admin">Close</button>
+    </div>
+
+    <div id="chat-user" class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chatUserTitle" tabindex="-1">
+      <h3 id="chatUserTitle">Chat with User</h3>
+      <div class="chat-messages" id="chatUserMessages" aria-live="polite" aria-atomic="false">
+        <p><strong>User:</strong> Please let me know when you're close.</p>
+      </div>
+      <div class="chat-input-group">
+        <input type="text" id="chatUserInput" class="chat-input" placeholder="Type your message..." aria-label="Message to User" />
+        <button class="send-btn" onclick="sendMessage('user')" aria-label="Send message to User">Send</button>
+      </div>
+      <button class="close-btn" onclick="closeChat('user')" aria-label="Close chat with User">Close</button>
+    </div>
+  </div>
+
+
+   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+  <script>
+    
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      darkModeToggle.textContent = document.body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+    });
+
+    function openChat(sender) {
+      const chatWindow = document.getElementById(`chat-${sender}`);
+      chatWindow.style.display = 'block';
+      chatWindow.focus();
+     
+      document.body.style.overflow = 'hidden';
+    }
+    function closeChat(sender) {
+      const chatWindow = document.getElementById(`chat-${sender}`);
+      chatWindow.style.display = 'none';
+     
+      document.body.style.overflow = '';
+    }
+    function sendStatus() {
+      const status = document.getElementById('statusSelect').value;
+      alert('Status updated: ' + status);
+      
+      const statusBadge = document.getElementById('driverStatus');
+      statusBadge.textContent = status;
+
+      
+      const greenStatuses = [
+        'On Trip',
+        'Driver assigned and preparing for the move',
+        'Items are being loaded',
+        'Loading complete, starting the journey',
+        'En route to delivery location',
+        'Items are being unloaded',
+        'Unloading complete',
+        'Move successfully completed'
+      ];
+      if (greenStatuses.includes(status)) {
+        statusBadge.style.backgroundColor = '#e0f7e9';
+        statusBadge.style.color = '#27ae60';
+        statusBadge.style.boxShadow = '0 0 8px #27ae60';
+      } else {
+        statusBadge.style.backgroundColor = '#fce4e4';
+        statusBadge.style.color = '#e74c3c';
+        statusBadge.style.boxShadow = '0 0 8px #e74c3c';
+      }
+    }
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoieWFhczNyIiwiYSI6ImNtYzZrMHQydDBybzQya3NjODIwb2F3YmMifQ.DMIbHrOr3DYHRILl8GqRQw'; 
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [36.8219, -1.2921],
+    zoom: 11
+  });
+    
+    function sendMessage(sender) {
+      const input = document.getElementById(`chat${capitalize(sender)}Input`);
+      const messagesContainer = document.getElementById(`chat${capitalize(sender)}Messages`);
+      const message = input.value.trim();
+      if (message.length === 0) return;
+
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
+      messagesContainer.appendChild(p);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      input.value = '';
+      input.focus();
+    }
+
+    
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    
+    document.querySelectorAll('.chat-preview').forEach(elem => {
+      elem.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          elem.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
