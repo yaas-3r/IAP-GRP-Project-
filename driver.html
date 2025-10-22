@@ -1,0 +1,197 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .send-icon img{
+        width: 50%;
+        height: 50%;
+        object-fit: contain;
+    }
+    .chat-input2{
+       border: none;
+        background: transparent;
+        font-size: 16px;
+        outline: none;
+        color: #2e2e3a;
+        width: 100%;
+    }
+    .chat-input-wrapper2{
+        display: flex;
+        align-items: center;
+        background: #f5f6f8;
+        border-radius: 15rem;
+        padding: 20px 15px;
+        width: 80%;
+        margin-left: 3.9rem;
+    }
+    .chat-icon2{
+        width: 1.2rem;
+        height: 1.2rem;
+        background-image: url("./images/chat_10547720.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin-right: 8px;
+    }
+     .send-icon2{
+       width: 3.5rem;
+       height: 3.5rem;
+       cursor: pointer;
+       background-color: #f5f6f8;
+       border-radius: 50%;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       margin-left: 1rem;
+    }
+    .send-icon2 img{
+        width: 50%;
+        height: 50%;
+        object-fit: contain;
+    }
+     .Chat-box{
+      max-width: fit-content;
+      height: auto;
+      background-color:#dad3d1 ;
+      color: black;
+      padding: 10px 10px;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      font-family:Arial, Helvetica, sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+     #chat-display::-webkit-scrollbar {
+      display: none; 
+    }
+    </style>
+</head>
+<body>
+    <h2>Update Move status</h2>
+    <select id="statusSelect">
+    <option value="Driver assigned and preparing for the move">Driver assigned and preparing for the move</option>
+    <option value="Driver en route to pickup location">Driver en route to pickup location</option>
+    <option value="Driver has arrived at pickup location">Driver has arrived at pickup location</option>
+    <option value="Items are being loaded">Items are being loaded</option>
+    <option value="Loading complete, starting the journey">Loading complete, starting the journey</option>
+    <option value="En route to delivery location">En route to delivery location</option>
+    <option value="Driver has arrived at delivery location">Driver has arrived at delivery location</option>
+    <option value="Items are being unloaded">Items are being unloaded</option>
+    <option value="Unloading complete">Unloading complete</option>
+    <option value="Move successfully completed">Move successfully completed</option>
+  </select>
+
+  <button  onclick="sendStatus()">Update status</button><br>
+
+  <button onclick="showChatBox()">Show chat box</button>
+
+
+  <div id="chat-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgb(46, 46, 58,0.7); z-index: 2000; display:none; justify-content: center; align-items: center; flex-direction: column;">
+  <div id="chat-wrapper" style="width: 60%; height: 80%; background-color: white; border-radius: 1rem; padding: 0;">
+      <div style="width: 100%; height: 6rem; box-shadow: 0 4px 8px rgba(0,0,0,0.3);  border-top-left-radius: 1rem; border-top-right-radius: 1rem;  display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 4rem; height: 4rem; border-radius: 50%; background-color: #3b82f6; margin-left: 1rem;"></div>
+        <p >Vincent Ruiru</p>
+      </div>
+
+      <div id="chat-display" style=" width: 100%; height: 70%; margin: auto; display: flex; flex-direction: column; overflow-y: auto;  scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;"></div>
+
+      <div style="display: flex; align-items: center; margin-top: 2.5rem;">
+         <div class="chat-input-wrapper2">
+                <div class="chat-icon2"></div>
+                <input id="message-input" class="chat-input2" type="text" placeholder="Message driver" >
+                
+            </div>
+             <div class="send-icon2" onclick="sendMessage()">
+                    <img src="./images/send_3608124.png" alt="send">
+            </div>
+      </div>
+
+  </div>
+ </div>
+
+
+
+  <script>
+    const ws = new WebSocket("ws://localhost:3000");
+
+    ws.onopen = () =>{
+        console.log("Websocket successfully established with server at port:3000");
+    }
+     ws.onmessage = (event)=>{
+          let info;
+          try{
+            info =JSON.parse( event.data);
+          }catch{
+            console.log("Error while getting received Data!");
+          }
+
+            
+            if(info.type === "Chat"){
+               const messageToDisplay = info.chat;
+
+               const div = document.createElement("div");
+               div.className = "Chat-box";
+               div.textContent = info.chat;
+               div.style.alignSelf = "flex-start";
+               div.style.marginLeft = "1rem";
+               const displayBox = document.getElementById("chat-display");
+               displayBox.appendChild(div);
+               displayBox.scrollTop = displayBox.scrollHeight;
+
+            }
+            
+        }
+
+    function sendStatus(){
+        const status = document.getElementById("statusSelect").value;
+
+        ws.send(JSON.stringify({
+            from: "Driver",
+            type: "StatusUpdate",
+            updateMessage: status
+        }));
+    }
+    function showChatBox(){
+      const display = document.getElementById("chat-overlay");
+      display.style.display = "flex"
+    }
+    function sendMessage(){
+        let chatMessage = document.getElementById("message-input").value;
+        if (!chatMessage.trim()) return;
+
+        ws.send(JSON.stringify({
+            from: "Driver",
+            type: "Chat",
+            chat: chatMessage
+        }))
+       
+        const div = document.createElement("div");
+          div.className = "Chat-box";
+          div.textContent = chatMessage;
+          div.style.alignSelf = "flex-end";
+          div.style.marginRight = "1rem";
+          const displayBox = document.getElementById("chat-display");
+          displayBox.appendChild(div);
+          displayBox.scrollTop = displayBox.scrollHeight;
+
+       document.getElementById("message-input").value = "";
+    }
+
+    document.getElementById("message-input").addEventListener("keydown", function(event){
+       if(event.key === "Enter"){
+        event.preventDefault();
+        sendMessage();
+       }
+    })
+
+  </script>
+
+
+</body>
+</html>
