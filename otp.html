@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify OTP | moveKenya</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="auth-container">
+    <form id="otpForm" class="auth-form active">
+      <h2>Enter OTP 🔐</h2>
+      <input type="text" name="otp" placeholder="6-digit OTP" required />
+      <button type="submit">Verify</button>
+    </form>
+  </div>
+
+  <script>
+  const email = new URLSearchParams(window.location.search).get("email");
+  document.getElementById("otpForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const otp = e.target.otp.value;
+    const res = await fetch("/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp })
+    });
+    alert(await res.text());
+  });
+  </script>
+</body>
+</html>

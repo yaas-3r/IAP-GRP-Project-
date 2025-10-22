@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Forgot Password | moveKenya</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="auth-container">
+    <form id="forgotForm" class="auth-form active">
+      <h2>Forgot Password?</h2>
+      <input type="email" name="email" placeholder="Enter your email" required />
+      <button type="submit">Send OTP</button>
+    </form>
+
+    <form id="resetForm" class="auth-form">
+      <h2>Reset Password</h2>
+      <input type="text" name="otp" placeholder="Enter OTP" required />
+      <input type="password" name="newPassword" placeholder="New Password" required />
+      <button type="submit">Reset</button>
+    </form>
+  </div>
+
+  <script>
+  const forgotForm = document.getElementById("forgotForm");
+  const resetForm = document.getElementById("resetForm");
+  let userEmail = "";
+
+  forgotForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    userEmail = e.target.email.value;
+    const res = await fetch("/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail })
+    });
+    alert(await res.text());
+    forgotForm.classList.remove("active");
+    resetForm.classList.add("active");
+  });
+
+  resetForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const otp = e.target.otp.value;
+    const newPassword = e.target.newPassword.value;
+    const res = await fetch("/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, otp, newPassword })
+    });
+    alert(await res.text());
+    if (res.ok) window.location.href = "auth.html";
+  });
+  </script>
+</body>
+</html>

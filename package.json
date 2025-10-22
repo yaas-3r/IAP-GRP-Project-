@@ -1,0 +1,29 @@
+{
+  "name": "iap-grp-project-",
+  "version": "1.0.0",
+  "main": "Websocket.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaas-3r/IAP-GRP-Project-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yaas-3r/IAP-GRP-Project-/issues"
+  },
+  "homepage": "https://github.com/yaas-3r/IAP-GRP-Project-#readme",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^7.0.9"
+  }
+}

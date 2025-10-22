@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at 10% 20%, #1a1a2e, #0f3460 60%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.auth-container {
+  width: 360px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+  padding: 2em;
+  text-align: center;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.toggle-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 5px;
+}
+
+.toggle-box button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 10px 0;
+  border-radius: 30px;
+  transition: all 0.3s;
+}
+
+.toggle-box button.active {
+  background: linear-gradient(90deg, #00b4d8, #48cae4);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.auth-form {
+  display: none;
+  flex-direction: column;
+  gap: 0.8em;
+}
+
+.auth-form.active {
+  display: flex;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.auth-form h2 {
+  color: #fff;
+  margin-bottom: 0.5em;
+}
+
+.auth-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.95em;
+}
+
+.auth-form input::placeholder {
+  color: #ccc;
+}
+
+.auth-form button {
+  margin-top: 10px;
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  border: none;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.link-text {
+  margin-top: 1em;
+}
+
+.link-text a {
+  color: #48cae4;
+  text-decoration: none;
+}
