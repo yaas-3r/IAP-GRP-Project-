@@ -1,4 +1,4 @@
-// ===== TOGGLE LOGIN / SIGNUP =====
+// auth.js
 const loginToggle = document.getElementById("loginToggle");
 const signupToggle = document.getElementById("signupToggle");
 const loginForm = document.getElementById("loginForm");
@@ -18,7 +18,7 @@ signupToggle.addEventListener("click", () => {
   loginForm.classList.remove("active");
 });
 
-// ===== SIGNUP FORM =====
+// SIGNUP
 signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(signupForm).entries());
@@ -30,7 +30,7 @@ signupForm.addEventListener("submit", async (e) => {
   alert(await res.text());
 });
 
-// ===== LOGIN FORM =====
+// LOGIN
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(loginForm).entries());
@@ -39,9 +39,11 @@ loginForm.addEventListener("submit", async (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   });
+
   const msg = await res.text();
   alert(msg);
+
   if (res.ok) {
-    window.location.href = "otp.html?email=" + data.email;
+    window.location.href = "/otp?email=" + encodeURIComponent(data.email);
   }
 });

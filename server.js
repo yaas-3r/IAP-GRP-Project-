@@ -1,3 +1,4 @@
+// server.js
 const http = require("http");
 const express = require("express");
 const app = express();
@@ -8,20 +9,26 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+// ===== Middleware =====
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ====== Create HTTP + WebSocket server ======
+// ===== Create HTTP + WebSocket server =====
 const server = http.createServer(app);
-
 let wss;
 try {
-  wss = require("./Websocket")(server);
-} catch {
-  console.log("Error thrown: Cannot get function from (./Websocket), make sure it is exported correctly!");
+  const wsModule = require("./Websocket");
+  if (typeof wsModule === "function") {
+    wss = wsModule(server);
+    console.log("✅ WebSocket server initialized successfully!");
+  } else {
+    console.log("❌ WebSocket module does not export a function.");
+  }
+} catch (err) {
+  console.error("❌ Failed to initialize WebSocket:", err.message);
 }
 
-// ====== Database Connection ======
+// ===== Database Connection =====
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -34,7 +41,7 @@ db.connect(err => {
   else console.log("✅ Connected to MySQL Database");
 });
 
-// ====== Email (Nodemailer) Setup ======
+// ===== Nodemailer Setup =====
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -43,20 +50,24 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-let otpStore = {}; // Temporary { email: otp }
+let otpStore = {}; // { email: { otp, role } }
 
-// ====== Serve your pages ======
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'Home.html')));
-app.get('/driver', (req, res) => res.sendFile(path.join(__dirname, 'driver.html')));
-app.get('/driverUI', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+// ====== ROUTES ======
 
-// Serve static files (CSS, JS, etc.)
+// ----- Serve HTML Pages -----
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "auth.html")));
+app.get("/otp", (req, res) => res.sendFile(path.join(__dirname, "otp.html")));
+app.get("/user-dashboard", (req, res) => res.sendFile(path.join(__dirname, "user-dashboard.html")));
+app.get("/admin/dashboard", (req, res) => res.sendFile(path.join(__dirname, "admin-dashboard.html")));
+app.get("/driver", (req, res) => res.sendFile(path.join(__dirname, "driver.html")));
+app.get("/driverUI", (req, res) => res.sendFile(path.join(__dirname, "index.html"))); // optional
+
+// ----- Serve static files (CSS/JS/Images in same folder) -----
 app.use(express.static(__dirname));
-
 
 // ====== AUTH ROUTES ======
 
-// --- SIGN UP ---
+// SIGNUP (user only)
 app.post("/signup", async (req, res) => {
   const { full_name, email, password, phone } = req.body;
 
@@ -76,44 +87,56 @@ app.post("/signup", async (req, res) => {
   });
 });
 
-// --- LOGIN (send OTP) ---
+// LOGIN (all roles)
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+  const tables = ["admins", "users", "drivers"];
 
-  db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
-    if (err) return res.status(500).send("Database error");
-    if (result.length === 0) return res.status(404).send("User not found");
+  const checkNext = (index) => {
+    if (index >= tables.length) return res.status(404).send("Account not found");
 
-    const user = result[0];
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).send("Incorrect password");
+    const table = tables[index];
+    db.query(`SELECT * FROM ${table} WHERE email = ?`, [email], async (err, result) => {
+      if (err) return res.status(500).send("Database error");
+      if (result.length === 0) return checkNext(index + 1);
 
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    otpStore[email] = otp;
+      const user = result[0];
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(401).send("Incorrect password");
 
-    await transporter.sendMail({
-      from: `"moveKenya" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Your Login OTP",
-      text: `Your OTP is ${otp}. It expires in 5 minutes.`
+      let role = table === "admins" ? "admin" : table === "drivers" ? "driver" : "user";
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      otpStore[email] = { otp, role };
+
+      await transporter.sendMail({
+        from: `"moveKenya" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Your Login OTP",
+        text: `Your OTP is ${otp}. It expires in 5 minutes.`
+      });
+
+      res.send("OTP sent to your email");
     });
+  };
 
-    res.send("OTP sent to your email.");
-  });
+  checkNext(0);
 });
 
-// --- VERIFY OTP ---
+// VERIFY OTP
 app.post("/verify-otp", (req, res) => {
   const { email, otp } = req.body;
-  if (otpStore[email] && otpStore[email] == otp) {
+  const entry = otpStore[email];
+
+  if (entry && entry.otp == otp) {
+    const role = entry.role;
     delete otpStore[email];
-    res.send("Login successful!");
+    res.json({ message: "Login successful!", role });
   } else {
     res.status(400).send("Invalid OTP");
   }
 });
 
-// --- FORGOT PASSWORD ---
+// FORGOT PASSWORD
 app.post("/forgot-password", (req, res) => {
   const { email } = req.body;
   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
@@ -121,7 +144,7 @@ app.post("/forgot-password", (req, res) => {
     if (result.length === 0) return res.status(404).send("Email not found");
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    otpStore[email] = otp;
+    otpStore[email] = { otp };
 
     await transporter.sendMail({
       from: `"moveKenya" <${process.env.EMAIL_USER}>`,
@@ -134,11 +157,12 @@ app.post("/forgot-password", (req, res) => {
   });
 });
 
-// --- RESET PASSWORD ---
+// RESET PASSWORD
 app.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
+  const entry = otpStore[email];
 
-  if (otpStore[email] && otpStore[email] == otp) {
+  if (entry && entry.otp == otp) {
     const hashed = await bcrypt.hash(newPassword, 10);
     db.query("UPDATE users SET password = ? WHERE email = ?", [hashed, email], err => {
       if (err) return res.status(500).send("Error updating password");
@@ -150,7 +174,49 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
-// ====== SERVER HANDLING ======
+// ADD DRIVER
+// ===== ADD DRIVER =====
+app.post("/admin/add-driver", async (req, res) => {
+  const { full_name, email, phone, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  db.query(
+    "INSERT INTO drivers (full_name, email, phone, password, status) VALUES (?, ?, ?, ?, 'inactive')",
+    [full_name, email, phone, hashed],
+    err => {
+      if (err) return res.status(500).send("Failed to add driver");
+      res.send("Driver added successfully");
+    }
+  );
+});
+
+
+
+// ===== ADMIN DASHBOARD API =====
+app.get("/admin/drivers", (req, res) => {
+  db.query("SELECT * FROM drivers", (err, result) => {
+    if (err) return res.status(500).send("DB error");
+    res.json(result);
+  });
+});
+
+app.put("/admin/driver-status/:id", (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  db.query("UPDATE drivers SET status = ? WHERE driver_id = ?", [status, id], err => {
+    if (err) return res.status(500).send("DB error");
+    res.send("Status updated");
+  });
+});
+
+app.delete("/admin/driver/:id", (req, res) => {
+  const { id } = req.params;
+  db.query("DELETE FROM drivers WHERE driver_id = ?", [id], err => {
+    if (err) return res.status(500).send("DB error");
+    res.send("Driver deleted");
+  });
+});
+
+// ====== Server handling ======
 process.on("SIGINT", () => {
   if (wss) wss.clients.forEach(client => client.close());
   console.log("SIGINT signal received! Closing server...");

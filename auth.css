@@ -1,8 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
+:root {
+  --heading-color: #792010;
+  --blue-light: #434d56;
+  --blue-dark: #26333f;
+  --brown-light: #d06f49;
+}
+
 body {
   font-family: "Poppins", sans-serif;
-  background: radial-gradient(circle at 10% 20%, #1a1a2e, #0f3460 60%);
+  background-image:url(./images/pexels-cottonbro-4568711.jpg) ;
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -10,15 +19,17 @@ body {
   overflow: hidden;
 }
 
+/* Floating glass box */
 .auth-container {
-  width: 360px;
+  width: 380px;
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(208, 111, 73, 0.3);
   padding: 2em;
   text-align: center;
   animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes float {
@@ -26,6 +37,7 @@ body {
   50% { transform: translateY(-10px); }
 }
 
+/* Toggle buttons */
 .toggle-box {
   display: flex;
   justify-content: space-between;
@@ -39,7 +51,7 @@ body {
   flex: 1;
   border: none;
   background: transparent;
-  color: #aaa;
+  color: #ddd;
   font-size: 1em;
   cursor: pointer;
   padding: 10px 0;
@@ -48,11 +60,12 @@ body {
 }
 
 .toggle-box button.active {
-  background: linear-gradient(90deg, #00b4d8, #48cae4);
+  background: linear-gradient(90deg, var(--brown-light), var(--heading-color));
   color: #fff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(208, 111, 73, 0.4);
 }
 
+/* Forms */
 .auth-form {
   display: none;
   flex-direction: column;
@@ -70,8 +83,9 @@ body {
 }
 
 .auth-form h2 {
-  color: #fff;
+  color: var(--brown-light);
   margin-bottom: 0.5em;
+  font-weight: 700;
 }
 
 .auth-form input {
@@ -88,27 +102,62 @@ body {
   color: #ccc;
 }
 
+/* Buttons */
 .auth-form button {
   margin-top: 10px;
-  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  background: linear-gradient(90deg, var(--heading-color), var(--brown-light));
   border: none;
   padding: 12px;
   color: white;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   transition: 0.3s;
 }
 
 .auth-form button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(208, 111, 73, 0.5);
 }
 
+/* Links */
 .link-text {
   margin-top: 1em;
 }
 
 .link-text a {
-  color: #48cae4;
+  color: var(--brown-light);
   text-decoration: none;
+  transition: 0.3s;
+}
+
+.link-text a:hover {
+  color: var(--heading-color);
+  text-decoration: underline;
+}
+
+/* Small glowing accents */
+.auth-container::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--brown-light), transparent 70%);
+  top: -50px;
+  left: -50px;
+  opacity: 0.3;
+  filter: blur(40px);
+}
+
+.auth-container::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--heading-color), transparent 70%);
+  bottom: -70px;
+  right: -70px;
+  opacity: 0.3;
+  filter: blur(50px);
 }

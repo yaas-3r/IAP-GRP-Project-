@@ -15,17 +15,35 @@
   </div>
 
   <script>
-  const email = new URLSearchParams(window.location.search).get("email");
-  document.getElementById("otpForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const otp = e.target.otp.value;
-    const res = await fetch("/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp })
-    });
-    alert(await res.text());
+const email = new URLSearchParams(window.location.search).get("email");
+document.getElementById("otpForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const otp = e.target.otp.value;
+
+  const res = await fetch("/verify-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp })
   });
-  </script>
+
+  if (res.ok) {
+    const data = await res.json();
+    alert(data.message);
+
+    // Redirect based on role
+   if (data.role === "admin") {
+  window.location.href = "/admin/dashboard";
+} else if (data.role === "driver") {
+  window.location.href = "/driver";
+} else {
+  window.location.href = "/user-dashboard";
+}
+
+  } else {
+    alert(await res.text());
+  }
+});
+</script>
+
 </body>
 </html>
