@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | moveKenya</title>
+  <link rel="stylesheet" href="auth.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1c1f2e, #2c3e50);
+      color: #f0f0f0;
+      margin: 0;
+      padding: 2em;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 2em;
+      color: #ffb74d;
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1em;
+    }
+
+    .controls button {
+      background-color: #ffb74d;
+      border: none;
+      color: #1c1f2e;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .controls button:hover {
+      background-color: #ffa726;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #ffb74d;
+      color: #1c1f2e;
+      font-size: 1em;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    td button {
+      background-color: #ffb74d;
+      color: #1c1f2e;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 0.9em;
+      margin-right: 4px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    td button:hover {
+      background-color: #ffa726;
+    }
+
+    /* Add Driver Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #2c3e50;
+      padding: 2em;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    .modal-content button {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Admin Dashboard</h1>
+    <h3>Manage Drivers</h3>
+
+    <div class="controls">
+      <button onclick="openModal()">Add New Driver</button>
+      <button onclick="fetchDrivers()">Refresh List</button>
+    </div>
+
+    <table id="driversTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Add Driver Modal -->
+  <div class="modal" id="driverModal">
+    <div class="modal-content">
+      <h3>Add Driver</h3>
+      <input type="text" id="driverName" placeholder="Full Name" />
+      <input type="email" id="driverEmail" placeholder="Email" />
+      <input type="text" id="driverPhone" placeholder="Phone" />
+      <input type="password" id="driverPassword" placeholder="Password" />
+      <button onclick="addDriver()">Add Driver</button>
+      <button onclick="closeModal()" style="margin-top: 10px; background: #d06f49;">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    async function fetchDrivers() {
+      const res = await fetch("/admin/drivers");
+      const drivers = await res.json();
+      const tbody = document.querySelector("#driversTable tbody");
+      tbody.innerHTML = "";
+      drivers.forEach(d => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${d.driver_id}</td>
+            <td>${d.full_name}</td>
+            <td>${d.email}</td>
+            <td>${d.phone}</td>
+            <td>${d.status}</td>
+            <td>
+              <button onclick="changeStatus(${d.driver_id}, 'available')">Activate</button>
+              <button onclick="changeStatus(${d.driver_id}, 'inactive')">Deactivate</button>
+              <button onclick="deleteDriver(${d.driver_id})">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function changeStatus(id, status) {
+      await fetch(`/admin/driver-status/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      });
+      fetchDrivers();
+    }
+
+    async function deleteDriver(id) {
+      if(!confirm("Are you sure you want to delete this driver?")) return;
+      await fetch(`/admin/driver/${id}`, { method: "DELETE" });
+      fetchDrivers();
+    }
+
+    // Modal Functions
+    function openModal() {
+      document.getElementById("driverModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("driverModal").style.display = "none";
+    }
+
+    async function addDriver() {
+      const full_name = document.getElementById("driverName").value;
+      const email = document.getElementById("driverEmail").value;
+      const phone = document.getElementById("driverPhone").value;
+      const password = document.getElementById("driverPassword").value;
+
+      if(!full_name || !email || !phone || !password) {
+        alert("All fields are required!");
+        return;
+      }
+
+      const res = await fetch("/admin/add-driver", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full_name, email, phone, password })
+      });
+
+      alert(await res.text());
+      closeModal();
+      fetchDrivers();
+    }
+
+    fetchDrivers();
+  </script>
+</body>
+</html>
