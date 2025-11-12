@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      background-image: url("./images/thumbnail.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      height: 200px;
+      overflow: hidden;
+      transition: height 0.8s ease, background-color 0.5s ease;
+    }
+
+    header:hover {
+      background-color: #45a049;
+      height: 400px;
+    }
+
+    header h1 {
+      font-size: 72px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      color: #0b0101;
+      margin: 0;
+      transition: transform 1s ease, font-size 1s ease;
+    }
+
+    header:hover h1 {
+      transform: translateY(-10px);
+      font-size: 100px;
+    }
+
+    /* Hidden text */
+    .header-extra {
+      opacity: 0;
+      color: #0b0101;
+      font-size: large;
+      max-height: 0;
+      font-style: italic;
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: opacity 1s ease, max-height 1s ease, transform 1s ease;
+    }
+
+    header:hover .header-extra, section.topic:hover .header-extra {
+      opacity: 1;
+      max-height: 200px;
+      transform: translateY(0);
+    }
+
+    footer {
+      background-color: #ac0cdd;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      width: 100%;
+      bottom: 0;
+    }
+
+    section.topic {
+      font-family: "Playfair Display", serif;
+      margin: 40px auto;
+      padding: 20px;
+      max-width: 800px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 1s ease, opacity 1s ease, scale 1s ease, box-shadow 1s ease;
+    }
+
+    section.topic:hover {
+      transform: translateY(-10px);
+      scale: calc(1.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>About Us - Move Kenya</h1>
+    <p class="header-extra">
+      Move Kenya is a trusted relocation and logistics company built on a simple promise: to make every move—whether home, office, or business—smooth, efficient, and stress-free.
+We understand that moving isn’t just about transporting items; it’s about carrying people’s memories, livelihoods, and futures.
+
+From packing and storage to safe delivery and setup, we bring professionalism, care, and reliability to every stage of the journey.
+With a dedicated team of experienced movers, a modern fleet of vehicles, and transparent pricing, Move Kenya has become a preferred partner for individuals, families, and businesses across Kenya.
+
+We go beyond transport — we move dreams, connections, and opportunities, ensuring every client starts their next chapter with peace of mind.
+    </p>
+  </header>
+
+  <main>
+    <section class="topic">
+      <h1>Our Mission</h1>
+      <p class="header-extra">To redefine relocation and logistics in Kenya by delivering seamless, affordable, and dependable moving services that put people first.
+We aim to simplify the moving experience through innovation, efficiency, and genuine care — ensuring every move is timely, safe, and hassle-free.</p>
+    </section>
+  </main>
+
+  <main>
+    <section class="topic">
+      <h1>Our Vision</h1>
+      <p class="header-extra">To be Kenya’s most trusted and customer-centered moving brand, recognized for reliability, excellence, and innovation in every service we offer.
+We envision a future where moving is not stressful but simple, smart, and secure, empowering individuals and businesses to relocate with confidence.</p>
+    </section>
+  </main>
+
+  <main>
+    <section class="topic">
+      <h1>Our Values</h1>
+      <p class="header-extra">
+        <strong>Customer-Centricity:</strong> We prioritize our clients’ needs, ensuring personalized service and satisfaction at every step.<br /><br />
+        <strong>Integrity:</strong> We operate with transparency, honesty, and accountability in all our dealings.<br /><br />
+        <strong>Reliability:</strong> We are committed to delivering on our promises, ensuring timely and safe moves.<br /><br />
+        <strong>Innovation:</strong> We continuously seek new ways to improve our services through technology and creative solutions.<br /><br />
+        <strong>Teamwork:</strong> We foster a collaborative environment where every team member is valued and empowered to contribute their best.<br /><br />
+        <strong>Sustainability:</strong> We are dedicated to minimizing our environmental impact through eco-friendly practices and responsible resource management.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Move Kenya</p>
+  </footer>
+</body>
+</html>

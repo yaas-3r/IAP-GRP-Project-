@@ -1,9 +1,10 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="driver.css?v=1.0">
 
     <style>
         .send-icon img{
@@ -97,6 +98,7 @@
       <div style="width: 100%; height: 6rem; box-shadow: 0 4px 8px rgba(0,0,0,0.3);  border-top-left-radius: 1rem; border-top-right-radius: 1rem;  display: flex; align-items: center; gap: 1rem;">
         <div style="width: 4rem; height: 4rem; border-radius: 50%; background-color: #3b82f6; margin-left: 1rem;"></div>
         <p >Vincent Ruiru</p>
+        <button style="margin-left: auto; margin-right: 1rem; padding: 0.5rem 1rem; border:none; background-color: #ef4444; color: white; border-radius: 0.5rem; cursor: pointer;" onclick="document.getElementById('chat-overlay').style.display='none'">Close</button>
       </div>
 
       <div id="chat-display" style=" width: 100%; height: 70%; margin: auto; display: flex; flex-direction: column; overflow-y: auto;  scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;"></div>
@@ -156,6 +158,8 @@
             type: "StatusUpdate",
             updateMessage: status
         }));
+
+        alert("Status updated to: " + status);
     }
     function showChatBox(){
       const display = document.getElementById("chat-overlay");
